@@ -154,6 +154,7 @@ public:
 
   bool recording = false;
   bool show_debug = false;
+  bool haptic_feedback_speed_camera = false;
   std::string lat_control;
 
 signals:

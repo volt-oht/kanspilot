@@ -2,6 +2,7 @@
 import os
 import math
 from typing import SupportsFloat
+import random
 
 import numpy as np
 from numbers import Number
@@ -33,10 +34,11 @@ from selfdrive.locationd.calibrationd import Calibration
 from selfdrive.hardware import HARDWARE, TICI, EON
 from selfdrive.manager.process_config import managed_processes
 from selfdrive.ntune import ntune_common_get, ntune_common_enabled, ntune_scc_get
-from selfdrive.road_speed_limiter import get_road_speed_limiter, road_speed_limiter_get_active # road_speed_limiter_get_max_speed
+# from selfdrive.road_speed_limiter import get_road_speed_limiter, road_speed_limiter_get_active # road_speed_limiter_get_max_speed
 from selfdrive.controls.lib.longitudinal_mpc_lib.long_mpc import AUTO_TR_CRUISE_GAP
 from selfdrive.ntune import ntune_common_get, ntune_common_enabled, ntune_scc_get, ntune_option_enabled, ntune_option_get, ntune_torque_get
 from decimal import Decimal
+from selfdrive.road_speed_limiter import SpeedLimiter
 
 SOFT_DISABLE_TIME = 3  # seconds
 LDW_MIN_SPEED = 31 * CV.MPH_TO_MS
@@ -542,9 +544,8 @@ class Controls:
         self.v_cruise_kph = 0
 
 
-    road_speed_limiter = get_road_speed_limiter()
     apply_limit_speed, road_limit_speed, left_dist, first_started, limit_log = \
-      road_speed_limiter.get_max_speed(CS, self.v_cruise_kph)
+      SpeedLimiter.instance().get_max_speed(CS, self.v_cruise_kph)
 
     if apply_limit_speed >= 20:
       self.v_cruise_kph_limit = min(apply_limit_speed, self.v_cruise_kph)
@@ -562,8 +563,7 @@ class Controls:
         self.slowing_down_alert = False
 
     else:
-      self.slowing_down_alert = False
-      self.slowing_down = False
+      self.reset()
       self.v_cruise_kph_limit = self.v_cruise_kph
 # 2 lines for Slow on Curve
     curv_speed_ms = self.cal_curve_speed(self.sm, CS.vEgo, self.sm.frame)

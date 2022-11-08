@@ -206,6 +206,7 @@ void ui_update_params(UIState *s) {
   Params params;
   s->scene.is_metric = params.getBool("IsMetric");
   s->show_debug = params.getBool("ShowDebugUI");
+  s->haptic_feedback_speed_camera = params.getBool("HapticFeedbackWhenSpeedCamera");
   s->lat_control = std::string(Params().get("LateralControl"));
   s->scene.brightness = std::stoi(params.get("OpkrUIBrightness"));
   s->scene.autoScreenOff = std::stoi(params.get("OpkrAutoScreenOff"));

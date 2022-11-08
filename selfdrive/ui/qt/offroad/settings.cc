@@ -2038,6 +2038,12 @@ CommunityPanel::CommunityPanel(QWidget* parent) : QWidget(parent) {
                                             "../assets/offroad/icon_shell.png",
                                             this));
 
+  toggles.append(new ParamControl("HapticFeedbackWhenSpeedCamera",
+                                            "HapticFeedbackWhenSpeedCamera",
+                                            "Haptic feedback when a speed camera is detected",
+                                            "../assets/offroad/icon_openpilot.png",
+                                            this));
+
   if (!useNM) toggles.append(new ParamControl("OpkrBatteryChargingControl",
                                             "Enable Battery Charging Control",
                                             "It uses the battery charge control function.",
